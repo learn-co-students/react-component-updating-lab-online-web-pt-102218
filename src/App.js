@@ -10,10 +10,12 @@ class App extends Component {
     updateInterval: 1,
     timerIDs: []
   }
+  
 
   componentDidMount() {
     this.handleAddTimer()
   }
+  
 
   render() {
     console.log(this.state.timerIDs);
@@ -33,7 +35,12 @@ class App extends Component {
 
   // returns array of components written in JSX, mapped from this.state.timerIDs
   renderTimers = () => this.state.timerIDs.map(({id, updateInterval}) => <Timer key={id} id={id} removeTimer={this.removeTimer} updateInterval={updateInterval}/>)
-
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.time === nextState.time) {
+      return false
+    }
+    return true
+  }
 
   // adds a random number for timer ID
   handleAddTimer = () => {
