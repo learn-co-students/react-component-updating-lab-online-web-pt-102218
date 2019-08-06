@@ -6,16 +6,34 @@ class Timer extends Component {
     this.timer = React.createRef();
     this.state = {
       time: 0,
-      color: "#" + Math.floor(Math.random() * 16777215).toString(16)
+      color: "#" + Math.floor(Math.random() * 16777215).toString(16),
     };
   }
 
   //Your code here
+  
+  static defaultProps = {
+    updateInterval: 1
+  }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.time === 0){
+      return true
+    }
+    if (nextState.time % this.props.updateInterval === 0) {
+      return true
+    }
+    return false
+  }
+
+  componentDidUpdate() {
+    this.timer.current.style.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  }
+  
   componentDidMount() {
     this.interval = setInterval(
       this.clockTick,
-      this.props.updateInterval * 1000
+      1000
     );
   }
 
@@ -37,7 +55,7 @@ class Timer extends Component {
 
   clockTick = () => {
     this.setState(prevState => ({
-      time: prevState.time + this.props.updateInterval
+      time: prevState.time + 1
     }));
   };
 
